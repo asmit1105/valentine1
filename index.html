@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>For Dhani ❤️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --hot-pink: #ff4d6d;
+            --soft-pink: #ffccd5;
+            --deep-red: #c9184a;
+            --paper: #ffffff;
+            --envelope: #ff85a1;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            background: radial-gradient(circle, #ffccd5 0%, #ffb3c1 100%);
+            font-family: 'Poppins', sans-serif;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            perspective: 2000px;
+        }
+
+        /* --- Background Floating Hearts --- */
+        #heart-container {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 1; /* Behind everything */
+        }
+
+        .floating-heart {
+            position: absolute;
+            bottom: -50px;
+            color: var(--hot-pink);
+            animation: floatUp linear infinite;
+            text-shadow: 0 0 5px rgba(255, 77, 109, 0.3);
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.8; }
+            100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* --- UI --- */
+        #ui-wrapper {
+            position: absolute;
+            z-index: 100;
+            text-align: center;
+            width: 100%;
+            transition: opacity 0.8s ease;
+        }
+
+        h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(2.2rem, 10vw, 4rem);
+            color: var(--deep-red);
+            margin-bottom: 40px;
+        }
+
+        .btn-container { display: flex; justify-content: center; gap: 20px; }
+
+        .btn {
+            padding: 12px 35px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 50px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        #yesBtn { background: var(--hot-pink); color: white; box-shadow: 0 10px 20px rgba(255, 77, 109, 0.3); }
+        #noBtn { background: white; color: var(--hot-pink); border: 2px solid var(--hot-pink); position: relative; }
+
+        /* --- Bouquet --- */
+        #bouquet {
+            position: fixed;
+            bottom: -150px; right: -150px;
+            font-size: 6rem;
+            z-index: 500;
+            transition: all 1.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .center-bouquet { bottom: 50% !important; right: 50% !important; transform: translate(50%, 50%) scale(1.5); }
+
+        /* --- ENVELOPE & CENTERED LETTER --- */
+        #main-container {
+            position: relative;
+            width: 320px;
+            height: 220px;
+            display: none;
+            z-index: 1000;
+            transform-style: preserve-3d;
+            margin-top: 60px; 
+        }
+
+        .envelope {
+            position: absolute;
+            width: 100%; height: 100%;
+            background: var(--envelope);
+            border-radius: 0 0 10px 10px;
+            z-index: 2;
+        }
+
+        .envelope::before {
+            content: ''; position: absolute; top: 0; left: 0;
+            width: 0; height: 0;
+            border-style: solid; border-width: 110px 160px 0 160px;
+            border-color: #ffb3c1 transparent transparent transparent;
+            z-index: 5;
+        }
+
+        .flap {
+            position: absolute; top: 0; left: 0; width: 0; height: 0;
+            border-style: solid; border-width: 110px 160px 0 160px;
+            border-color: var(--envelope) transparent transparent transparent;
+            transform-origin: top;
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 6;
+        }
+        .flap-open { transform: rotateX(180deg); z-index: 1; }
+
+        .letter-paper {
+            position: absolute;
+            top: 5px; left: 10px;
+            width: 300px;
+            background: #fff;
+            padding: 25px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            transition: all 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 3;
+            height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .letter-open {
+            height: 420px;
+            top: -100px; 
+            transform: scale(1.1);
+        }
+
+        .letter-content {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.6rem;
+            color: #444;
+            opacity: 0;
+            transition: opacity 0.5s 0.8s;
+            text-align: center;
+        }
+
+        .confetti { position: fixed; width: 8px; height: 8px; border-radius: 50%; z-index: 999; }
+    </style>
+</head>
+<body>
+
+    <audio id="music" src="./The Weeknd - DIE FOR YOU (Lyrics).mp3"></audio>
+
+    <div id="heart-container"></div>
+
+    <div id="ui-wrapper">
+        <h1>Dhani, Will You Be My Valentine?</h1>
+        <div class="btn-container">
+            <button id="yesBtn" class="btn" onclick="start()">Yes</button>
+            <button id="noBtn" class="btn" onmouseover="dodge()">No</button>
+        </div>
+    </div>
+
+    <div id="bouquet">💐</div>
+
+    <div id="main-container">
+        <div class="flap" id="flap"></div>
+        <div class="envelope"></div>
+        <div class="letter-paper" id="paper">
+            <div class="letter-content" id="text">
+                <p>To Dhani,</p>
+                <br>
+                <p style="font-size: 2rem; color: var(--deep-red);">Thanks, cutie!</p>
+                <p style="font-family: 'Poppins'; font-size: 0.85rem; margin: 15px 0; color: #666;">
+                    "You really made my day"
+                </p>
+                <br>
+                <p style="text-align: right; width: 100%;">Yours Truly,Krishna❤️</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 1. Re-added Floating Hearts Background
+        function createBackgroundHearts() {
+            const container = document.getElementById('heart-container');
+            setInterval(() => {
+                const heart = document.createElement('div');
+                heart.className = 'floating-heart';
+                heart.innerHTML = ['❤️', '💖', '💕', '✨'][Math.floor(Math.random() * 4)];
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.fontSize = (Math.random() * 20 + 15) + 'px';
+                heart.style.animationDuration = (Math.random() * 3 + 3) + 's';
+                container.appendChild(heart);
+                setTimeout(() => heart.remove(), 6000);
+            }, 400);
+        }
+
+        function dodge() {
+            const btn = document.getElementById('noBtn');
+            const x = Math.random() * (window.innerWidth - 150);
+            const y = Math.random() * (window.innerHeight - 100);
+            btn.style.position = 'fixed';
+            btn.style.left = x + 'px';
+            btn.style.top = y + 'px';
+        }
+
+        function start() {
+            document.getElementById('music').play().catch(() => {});
+            document.getElementById('ui-wrapper').style.opacity = '0';
+            
+            const bq = document.getElementById('bouquet');
+            bq.classList.add('center-bouquet');
+
+            setTimeout(() => {
+                bq.style.display = 'none';
+                createExplosion();
+                
+                const container = document.getElementById('main-container');
+                container.style.display = 'block';
+                
+                setTimeout(() => {
+                    document.getElementById('flap').classList.add('flap-open');
+                    setTimeout(() => {
+                        document.getElementById('paper').classList.add('letter-open');
+                        setTimeout(() => {
+                            document.getElementById('text').style.opacity = '1';
+                        }, 500);
+                    }, 600);
+                }, 400);
+            }, 1200);
+        }
+
+        function createExplosion() {
+            for(let i=0; i<60; i++) {
+                const c = document.createElement('div');
+                c.className = 'confetti';
+                c.style.left = '50%'; c.style.top = '50%';
+                c.style.backgroundColor = `hsl(${Math.random()*360}, 100%, 75%)`;
+                document.body.appendChild(c);
+                const a = Math.random() * Math.PI * 2;
+                const d = Math.random() * 250 + 50;
+                c.animate([
+                    { transform: 'translate(0,0) scale(1)', opacity: 1 },
+                    { transform: `translate(${Math.cos(a)*d}px, ${Math.sin(a)*d}px) scale(0)`, opacity: 0 }
+                ], { duration: 1000 }).onfinish = () => c.remove();
+            }
+        }
+
+        // Initialize background hearts
+        createBackgroundHearts();
+    </script>
+</body>
+</html>
